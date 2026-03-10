@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="section">
+    <h2 class="section-title">⚙️ Admin Dashboard</h2>
+    <p class="section-sub">Manage your store</p>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat-box">
+            <h3>{{ users }}</h3>
+            <p>👤 Total Users</p>
+        </div>
+        <div class="stat-box">
+            <h3>{{ products }}</h3>
+            <p>📦 Total Products</p>
+        </div>
+        <div class="stat-box">
+            <h3>{{ orders }}</h3>
+            <p>🛒 Total Orders</p>
+        </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="admin-cards">
+        <a href="{{ url_for('admin_products') }}" class="admin-card">
+            <span>📦</span>
+            <h4>Manage Products</h4>
+            <p>Add, edit, delete products</p>
+        </a>
+        <a href="{{ url_for('admin_orders') }}" class="admin-card">
+            <span>🛒</span>
+            <h4>Manage Orders</h4>
+            <p>View and update order status</p>
+        </a>
+        <a href="{{ url_for('admin_add') }}" class="admin-card">
+            <span>➕</span>
+            <h4>Add Product</h4>
+            <p>Add new footwear to store</p>
+        </a>
+        <a href="{{ url_for('index') }}" class="admin-card">
+            <span>🌐</span>
+            <h4>View Store</h4>
+            <p>See customer facing website</p>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

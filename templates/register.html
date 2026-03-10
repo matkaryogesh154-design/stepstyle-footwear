@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="form-box">
+    <div style="text-align:center; margin-bottom:24px;">
+        <span style="font-size:2.5rem;">✨</span>
+        <h2>Create Account</h2>
+        <p>Join StepStyle for the best deals</p>
+    </div>
+
+    <form method="POST">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email address" required>
+        <input type="password" name="password" placeholder="Create password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+        <button type="submit" class="btn">Create Account →</button>
+    </form>
+
+    <p>Already registered? <a href="{{ url_for('login') }}">Login here</a></p>
+</div>
+
+{% endblock %}

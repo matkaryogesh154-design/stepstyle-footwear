@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-tag">🟢 New Collection 2026</div>
+    <h1>Step Into<br><span class="hero-accent">Your Style</span></h1>
+    <p>Discover premium footwear curated for every occasion. From boardrooms to beaches — find your perfect pair.</p>
+    <div class="hero-btns">
+        <a href="{{ url_for('products') }}" class="hero-btn-white">Shop Now →</a>
+        <a href="{{ url_for('products') }}?category=Sneakers" class="hero-btn-dark">View Sneakers</a>
+    </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section">
+    <h2 class="section-title">Shop by Category</h2>
+    <p class="section-sub">Find exactly what you're looking for</p>
+    <div class="cat-grid">
+        <a href="{{ url_for('products') }}?category=Sneakers" class="cat-card cat-blue">
+            <span class="cat-emoji">👟</span>
+            <p class="cat-name">Sneakers</p>
+        </a>
+        <a href="{{ url_for('products') }}?category=Formal" class="cat-card cat-yellow">
+            <span class="cat-emoji">👞</span>
+            <p class="cat-name">Formal</p>
+        </a>
+        <a href="{{ url_for('products') }}?category=Sports" class="cat-card cat-green">
+            <span class="cat-emoji">⚽</span>
+            <p class="cat-name">Sports</p>
+        </a>
+        <a href="{{ url_for('products') }}?category=Sandals" class="cat-card cat-pink">
+            <span class="cat-emoji">👡</span>
+            <p class="cat-name">Sandals</p>
+        </a>
+    </div>
+</div>
+
+<!-- FEATURED PRODUCTS -->
+<div class="section">
+    <h2 class="section-title">Featured Products</h2>
+    <p class="section-sub">Handpicked for you</p>
+    {% if products %}
+    <div class="grid">
+        {% for p in products %}
+        <div class="card">
+            <div class="card-img-wrap">
+                <img src="{{ p.image_url }}" alt="{{ p.name }}"
+                     onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                <span class="card-tag">{{ p.category }}</span>
+            </div>
+            <div class="card-body">
+                <p class="brand">{{ p.brand }}</p>
+                <h3>{{ p.name }}</h3>
+                <div class="card-footer">
+                    <span class="price">₹{{ "{:,.0f}".format(p.price) }}</span>
+                    <form method="POST" action="{{ url_for('add_cart', pid=p.id) }}">
+                        <button type="submit" class="btn-add">+ Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty">
+        <p style="font-size:3rem;">👟</p>
+        <p>No products yet!</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- TRUST SECTION -->
+<div class="trust-section">
+    <div class="trust-grid">
+        <div class="trust-item">
+            <span class="trust-icon">🚚</span>
+            <h4>Free Shipping</h4>
+            <p>On orders above ₹2000</p>
+        </div>
+        <div class="trust-item">
+            <span class="trust-icon">🔄</span>
+            <h4>Easy Returns</h4>
+            <p>30-day return policy</p>
+        </div>
+        <div class="trust-item">
+            <span class="trust-icon">🔒</span>
+            <h4>Secure Payment</h4>
+            <p>100% safe checkout</p>
+        </div>
+        <div class="trust-item">
+            <span class="trust-icon">⭐</span>
+            <h4>Top Brands</h4>
+            <p>Nike, Adidas & more</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

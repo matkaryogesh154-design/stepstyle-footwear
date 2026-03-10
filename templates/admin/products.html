@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="page-head">
+        <h2>📦 All Products</h2>
+        <a href="{{ url_for('admin_add') }}" class="btn">+ Add New</a>
+    </div>
+
+    <table>
+        <tr>
+            <th>Image</th><th>Name</th><th>Category</th>
+            <th>Price</th><th>Stock</th><th>Actions</th>
+        </tr>
+        {% for p in products %}
+        <tr>
+            <td><img src="{{ p.image_url }}" style="width:60px;height:45px;object-fit:cover;"></td>
+            <td>{{ p.name }}<br><small>{{ p.brand }}</small></td>
+            <td>{{ p.category }}</td>
+            <td>₹{{ p.price }}</td>
+            <td>{{ p.stock }}</td>
+            <td>
+                <a href="{{ url_for('admin_edit', pid=p.id) }}" class="btn-sm">Edit</a>
+                <form method="POST" action="{{ url_for('admin_delete', pid=p.id) }}" style="display:inline;">
+                    <button type="submit" class="btn-red" onclick="return confirm('Delete?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

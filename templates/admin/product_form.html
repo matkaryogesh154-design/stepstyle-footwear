@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="form-box">
+    <h2>{% if product %}Edit Product{% else %}Add Product{% endif %}</h2>
+    <form method="POST">
+        <input type="text" name="name" placeholder="Product Name"
+               value="{{ product.name if product else '' }}" required>
+
+        <input type="number" name="price" placeholder="Price"
+               value="{{ product.price if product else '' }}" required>
+
+        <select name="category" required>
+            {% for cat in ['Sneakers','Formal','Sandals','Sports'] %}
+            <option value="{{ cat }}"
+                {% if product and product.category == cat %}selected{% endif %}>
+                {{ cat }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="brand" placeholder="Brand"
+               value="{{ product.brand if product else '' }}" required>
+
+        <input type="number" name="stock" placeholder="Stock"
+               value="{{ product.stock if product else '' }}" required>
+
+        <input type="text" name="image_url" placeholder="Image URL"
+               value="{{ product.image_url if product else '' }}">
+
+        <textarea name="description" placeholder="Description" rows="3">
+            {{ product.description if product else '' }}
+        </textarea>
+
+        <button type="submit" class="btn">
+            {% if product %}Update Product{% else %}Add Product{% endif %}
+        </button>
+        <a href="{{ url_for('admin_products') }}" class="btn-sm">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

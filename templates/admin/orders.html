@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <h2>🛒 All Orders</h2>
+    {% for order in orders %}
+    <div class="order-card">
+        <div class="order-top">
+            <span><strong>Order #{{ order.id }}</strong></span>
+            <span>User ID: {{ order.user_id }}</span>
+            <span>₹{{ order.total }}</span>
+            <span class="status {{ order.status|lower }}">{{ order.status }}</span>
+        </div>
+        <p>📍 {{ order.address }}</p>
+        <p>🗓 {{ order.date.strftime('%d %b %Y') }}</p>
+
+        <form method="POST" action="{{ url_for('update_status', oid=order.id) }}">
+            <select name="status" onchange="this.form.submit()">
+                {% for s in ['Pending','Processing','Shipped','Delivered'] %}
+                <option value="{{ s }}" {% if order.status == s %}selected{% endif %}>
+                    {{ s }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

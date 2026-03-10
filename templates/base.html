@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}StepStyle{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="{{ url_for('index') }}" class="logo">
+        <span class="logo-icon">👟</span>
+        <span class="logo-text">StepStyle</span>
+    </a>
+    <div class="nav-right">
+        {% if session.user_id %}
+            <a href="{{ url_for('cart') }}" class="cart-btn">
+                🛍️
+                {% if cart_count() > 0 %}
+                <span class="cart-dot">{{ cart_count() }}</span>
+                {% endif %}
+            </a>
+            <a href="{{ url_for('profile') }}" class="nav-icon-btn">👤</a>
+            {% if session.is_admin %}
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-icon-btn">⚙️</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" class="nav-icon-btn">🚪</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="nav-btn-outline">Login</a>
+            <a href="{{ url_for('register') }}" class="nav-btn-fill">Register</a>
+        {% endif %}
+    </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+    <div class="flash {{ cat }}">{{ msg }} <span onclick="this.parentElement.remove()">×</span></div>
+    {% endfor %}
+{% endwith %}
+
+<div class="main">{% block content %}{% endblock %}</div>
+
+<footer>
+    <p>© 2024 StepStyle. Premium Footwear.</p>
+</footer>
+
+</body>
+</html>
