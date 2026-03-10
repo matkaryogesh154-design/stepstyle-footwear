@@ -194,10 +194,16 @@ def place_order(id):
 def admin_dashboard():
     if not session.get('is_admin'):
         return redirect(url_for('login'))
+    total_users = User.query.count()
+    total_products = Product.query.count()
+    total_orders = Order.query.count()
+    total_revenue = db.session.query(db.func.sum(Order.total)).scalar() or 0
     return render_template('admin/dashboard.html',
-        users=User.query.count(),
-        products=Product.query.count(),
-        orders=Order.query.count())
+                           total_users=total_users,
+                           total_products=total_products,
+                           total_orders=total_orders,
+                           total_revenue=total_revenue)
+
 
 @app.route('/admin/products')
 def admin_products():

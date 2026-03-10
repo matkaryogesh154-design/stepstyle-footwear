@@ -696,3 +696,166 @@ footer {
     border-bottom: 1px solid var(--border);
 }
 .mini-order:last-child { border-bottom: none; }
+
+/* ===== ADMIN DASHBOARD HERO ===== */
+.admin-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f3460 100%);
+    padding: 32px;
+    color: white;
+}
+.admin-hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.admin-welcome {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.admin-welcome-icon {
+    font-size: 2.8rem;
+    background: rgba(255,255,255,0.1);
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+.admin-welcome h1 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+}
+.admin-welcome p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+}
+.admin-date {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+/* ===== ADMIN STATS GRID ===== */
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 36px;
+}
+.admin-stat-card {
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+.admin-stat-card:hover { transform: translateY(-4px); }
+.admin-stat-card::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    opacity: 0.15;
+    background: white;
+}
+.admin-stat-card.blue   { background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: white; }
+.admin-stat-card.green  { background: linear-gradient(135deg, #15803d, #22c55e); color: white; }
+.admin-stat-card.yellow { background: linear-gradient(135deg, #b45309, #f59e0b); color: white; }
+.admin-stat-card.red    { background: linear-gradient(135deg, #991b1b, #ef4444); color: white; }
+.stat-icon { font-size: 2.2rem; }
+.stat-info h2 {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.stat-info p { font-size: 0.82rem; opacity: 0.85; font-weight: 600; }
+.stat-trend {
+    margin-left: auto;
+    font-size: 1.5rem;
+    opacity: 0.5;
+}
+
+/* ===== ADMIN SECTION TITLE ===== */
+.admin-section-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--primary);
+}
+
+/* ===== ADMIN ACTION GRID ===== */
+.admin-action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+}
+.action-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 24px;
+    border-radius: 18px;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.action-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.2); }
+.action-card.purple { background: linear-gradient(135deg, #5b21b6, #8b5cf6); }
+.action-card.teal   { background: linear-gradient(135deg, #0f766e, #14b8a6); }
+.action-card.orange { background: linear-gradient(135deg, #c2410c, #f97316); }
+.action-card.navy   { background: linear-gradient(135deg, #1e3a5f, #3b82f6); }
+.action-icon { font-size: 2rem; }
+.action-info h4 { font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+.action-info p { font-size: 0.82rem; opacity: 0.8; }
+.action-arrow {
+    margin-left: auto;
+    font-size: 1.5rem;
+    opacity: 0.6;
+    transition: transform 0.2s;
+}
+.action-card:hover .action-arrow { transform: translateX(4px); opacity: 1; }
+
+/* ===== ADMIN TIPS ===== */
+.admin-tips {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 24px;
+    border: 2px solid var(--border);
+}
+.admin-tips h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+.tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: white;
+    padding: 14px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+.tip-item span { font-size: 1.4rem; }
+.tip-item p { font-size: 0.82rem; color: var(--gray); line-height: 1.5; }

@@ -1,49 +1,115 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="admin-hero">
+    <div class="admin-hero-content">
+        <div class="admin-welcome">
+            <span class="admin-welcome-icon">⚙️</span>
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Welcome back! Here's what's happening in your store.</p>
+            </div>
+        </div>
+        <div class="admin-date">
+            📅 StepStyle Store
+        </div>
+    </div>
+</div>
+
 <div class="section">
-    <h2 class="section-title">⚙️ Admin Dashboard</h2>
-    <p class="section-sub">Manage your store</p>
 
-    <!-- STATS -->
-    <div class="stats">
-        <div class="stat-box">
-            <h3>{{ users }}</h3>
-            <p>👤 Total Users</p>
+    <!-- STATS CARDS -->
+    <div class="admin-stats-grid">
+        <div class="admin-stat-card blue">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <h2>{{ total_users }}</h2>
+                <p>Total Users</p>
+            </div>
+            <div class="stat-trend">↑</div>
         </div>
-        <div class="stat-box">
-            <h3>{{ products }}</h3>
-            <p>📦 Total Products</p>
+        <div class="admin-stat-card green">
+            <div class="stat-icon">👟</div>
+            <div class="stat-info">
+                <h2>{{ total_products }}</h2>
+                <p>Total Products</p>
+            </div>
+            <div class="stat-trend">↑</div>
         </div>
-        <div class="stat-box">
-            <h3>{{ orders }}</h3>
-            <p>🛒 Total Orders</p>
+        <div class="admin-stat-card yellow">
+            <div class="stat-icon">🛒</div>
+            <div class="stat-info">
+                <h2>{{ total_orders }}</h2>
+                <p>Total Orders</p>
+            </div>
+            <div class="stat-trend">↑</div>
+        </div>
+        <div class="admin-stat-card red">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+                <h2>₹{{ "{:,.0f}".format(total_revenue) if total_revenue else '0' }}</h2>
+                <p>Total Revenue</p>
+            </div>
+            <div class="stat-trend">↑</div>
         </div>
     </div>
 
-    <!-- QUICK LINKS -->
-    <div class="admin-cards">
-        <a href="{{ url_for('admin_products') }}" class="admin-card">
-            <span>📦</span>
-            <h4>Manage Products</h4>
-            <p>Add, edit, delete products</p>
+    <!-- QUICK ACTIONS -->
+    <h3 class="admin-section-title">⚡ Quick Actions</h3>
+    <div class="admin-action-grid">
+        <a href="{{ url_for('admin_products') }}" class="action-card purple">
+            <div class="action-icon">📦</div>
+            <div class="action-info">
+                <h4>Manage Products</h4>
+                <p>Add, edit, delete products</p>
+            </div>
+            <span class="action-arrow">→</span>
         </a>
-        <a href="{{ url_for('admin_orders') }}" class="admin-card">
-            <span>🛒</span>
-            <h4>Manage Orders</h4>
-            <p>View and update order status</p>
+        <a href="{{ url_for('admin_orders') }}" class="action-card teal">
+            <div class="action-icon">🛍️</div>
+            <div class="action-info">
+                <h4>Manage Orders</h4>
+                <p>View and update order status</p>
+            </div>
+            <span class="action-arrow">→</span>
         </a>
-        <a href="{{ url_for('admin_add') }}" class="admin-card">
-            <span>➕</span>
-            <h4>Add Product</h4>
-            <p>Add new footwear to store</p>
+        <a href="{{ url_for('admin_add') }}" class="action-card orange">
+            <div class="action-icon">➕</div>
+            <div class="action-info">
+                <h4>Add Product</h4>
+                <p>Add new footwear to store</p>
+            </div>
+            <span class="action-arrow">→</span>
         </a>
-        <a href="{{ url_for('index') }}" class="admin-card">
-            <span>🌐</span>
-            <h4>View Store</h4>
-            <p>See customer facing website</p>
+        <a href="{{ url_for('index') }}" class="action-card navy">
+            <div class="action-icon">🌐</div>
+            <div class="action-info">
+                <h4>View Store</h4>
+                <p>See customer facing website</p>
+            </div>
+            <span class="action-arrow">→</span>
         </a>
     </div>
+
+    <!-- TIPS -->
+    <div class="admin-tips">
+        <h3>💡 Quick Tips</h3>
+        <div class="tips-grid">
+            <div class="tip-item">
+                <span>📸</span>
+                <p>Product images should be high quality for better sales</p>
+            </div>
+            <div class="tip-item">
+                <span>🏷️</span>
+                <p>Update order status regularly to keep customers informed</p>
+            </div>
+            <div class="tip-item">
+                <span>📊</span>
+                <p>Check orders daily to ensure timely delivery</p>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}
