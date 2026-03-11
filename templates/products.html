@@ -50,8 +50,10 @@
         {% for p in products %}
         <div class="card">
             <div class="card-img-wrap">
-                <img src="{{ p.image_url }}" alt="{{ p.name }}"
-                     onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+    <a href="{{ url_for('product_detail', pid=p.id) }}">
+    <img src="{{ p.image_url }}" alt="{{ p.name }}"
+         onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+    </a>
                 <span class="card-tag">{{ p.category }}</span>
                 {% if p.stock == 0 %}
                 <span class="card-tag-red">Out of Stock</span>

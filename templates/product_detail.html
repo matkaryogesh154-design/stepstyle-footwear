@@ -1,29 +1,130 @@
-<div class="container mt-5">
+{% extends 'base.html' %}
+{% block content %}
 
-<div class="row">
+<div class="section">
 
-<div class="col-md-6">
-<img src="{{ product.image }}" class="img-fluid">
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <a href="{{ url_for('index') }}">Home</a>
+        <span>›</span>
+        <a href="{{ url_for('products') }}">Products</a>
+        <span>›</span>
+        <a href="{{ url_for('products') }}?category={{ product.category }}">{{ product.category }}</a>
+        <span>›</span>
+        <span>{{ product.name }}</span>
+    </div>
+
+    <!-- PRODUCT DETAIL -->
+    <div class="product-detail-layout">
+
+        <!-- LEFT - IMAGE -->
+        <div class="product-detail-img">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}"
+                 onerror="this.src='https://via.placeholder.com/500x400?text=No+Image'">
+            <div class="product-img-badges">
+                <span class="card-tag">{{ product.category }}</span>
+                {% if product.stock == 0 %}
+                <span class="card-tag-red">Out of Stock</span>
+                {% elif product.stock < 5 %}
+                <span class="card-tag-yellow">Only {{ product.stock }} left!</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RIGHT - INFO -->
+        <div class="product-detail-info">
+            <p class="brand" style="font-size:0.9rem;">{{ product.brand }}</p>
+            <h1 class="product-detail-name">{{ product.name }}</h1>
+
+            <!-- RATING -->
+            <div class="product-detail-rating">
+                {% for i in range(1, 6) %}
+                    {% if i <= avg_rating %}
+                    <span class="star filled" style="font-size:1.4rem;">★</span>
+                    {% else %}
+                    <span class="star" style="font-size:1.4rem;">★</span>
+                    {% endif %}
+                {% endfor %}
+                <span style="font-weight:700;margin-left:8px;">{{ avg_rating }}</span>
+                <span style="color:#888;font-size:0.85rem;margin-left:6px;">({{ rating_count }} reviews)</span>
+            </div>
+
+            <!-- PRICE -->
+            <div class="product-detail-price">
+                ₹{{ "{:,.0f}".format(product.price) }}
+            </div>
+
+            <!-- DESCRIPTION -->
+            <p class="product-detail-desc">{{ product.description }}</p>
+
+            <!-- STOCK -->
+            <div class="product-detail-stock">
+                {% if product.stock > 0 %}
+                <span class="in-stock">✅ In Stock ({{ product.stock }} available)</span>
+                {% else %}
+                <span class="out-stock">❌ Out of Stock</span>
+                {% endif %}
+            </div>
+
+            <!-- ADD TO CART -->
+            {% if product.stock > 0 %}
+            <form method="POST" action="{{ url_for('add_cart', pid=product.id) }}">
+                <button type="submit" class="btn-detail-cart">
+                    🛒 Add to Cart
+                </button>
+            </form>
+            {% endif %}
+
+            <!-- RATE -->
+            {% if session.user_id %}
+            <div class="product-detail-rate">
+                <p>Rate this product:</p>
+                <form method="POST" action="{{ url_for('rate_product', pid=product.id) }}" class="rate-form">
+                    {% for i in range(1, 6) %}
+                    <button type="submit" name="stars" value="{{ i }}" class="star-btn" style="font-size:1.5rem;">★</button>
+                    {% endfor %}
+                </form>
+            </div>
+            {% endif %}
+
+            <!-- FEATURES -->
+            <div class="product-features">
+                <div class="pfeature">🚚 <span>Free delivery on ₹2000+</span></div>
+                <div class="pfeature">🔄 <span>30-day easy returns</span></div>
+                <div class="pfeature">✅ <span>100% authentic product</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RELATED PRODUCTS -->
+    {% if related %}
+    <div style="margin-top:48px;">
+        <h2 class="section-title">Similar Products</h2>
+        <p class="section-sub">You might also like</p>
+        <div class="grid">
+            {% for p in related %}
+            <div class="card">
+                <div class="card-img-wrap">
+                    <a href="{{ url_for('product_detail', pid=p.id) }}">
+                        <img src="{{ p.image_url }}" alt="{{ p.name }}"
+                             onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                    </a>
+                    <span class="card-tag">{{ p.category }}</span>
+                </div>
+                <div class="card-body">
+                    <p class="brand">{{ p.brand }}</p>
+                    <h3>{{ p.name }}</h3>
+                    <div class="card-footer">
+                        <span class="price">₹{{ "{:,.0f}".format(p.price) }}</span>
+                        <a href="{{ url_for('product_detail', pid=p.id) }}" class="btn-add">View →</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
 </div>
 
-<div class="col-md-6">
-
-<h2>{{ product.name }}</h2>
-
-<h3 class="text-success">₹{{ product.price }}</h3>
-
-<p>{{ product.description }}</p>
-
-<a href="/add_to_cart/{{ product.id }}" class="btn btn-warning">
-Add to Cart
-</a>
-
-<a href="/wishlist/add/{{ product.id }}" class="btn btn-outline-danger">
-❤️ Wishlist
-</a>
-
-</div>
-
-</div>
-
-</div>
+{% endblock %}

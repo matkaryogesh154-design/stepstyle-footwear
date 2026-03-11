@@ -96,26 +96,31 @@ def logout():
 
 @app.route('/products')
 def products():
-    cat = request.args.get('category', '')
     search = request.args.get('search', '')
+    selected = request.args.get('category', '')
     query = Product.query
-    if cat:
-        query = query.filter_by(category=cat)
     if search:
         query = query.filter(Product.name.ilike(f'%{search}%'))
+    if selected:
+        query = query.filter_by(category=selected)
     items = query.all()
     ratings = {}
     for p in items:
         r = Rating.query.filter_by(product_id=p.id).all()
         ratings[p.id] = round(sum(x.stars for x in r) / len(r), 1) if r else 0
-    return render_template('products.html', products=items,
-                           selected=cat, search=search, ratings=ratings)
+    return render_template('products.html', products=items, ratings=ratings, search=search, selected=selected)
 
-@app.route('/product/<int:id>')
-def product_detail(id):
-    product = Product.query.get_or_404(id)
-    return render_template("product_detail.html", product=product)
-
+@app.route('/product/<int:pid>')
+def product_detail(pid):
+    product = Product.query.get_or_404(pid)
+    ratings = Rating.query.filter_by(product_id=pid).all()
+    avg_rating = round(sum(r.stars for r in ratings) / len(ratings), 1) if ratings else 0
+    related = Product.query.filter_by(category=product.category).filter(Product.id != pid).limit(4).all()
+    return render_template('product_detail.html',
+                           product=product,
+                           avg_rating=avg_rating,
+                           rating_count=len(ratings),
+                           related=related)
 @app.route('/search')
 def search():
     query = request.args.get('q')
@@ -272,6 +277,7 @@ def admin_orders():
         return redirect(url_for('login'))
     orders = Order.query.order_by(Order.date.desc()).all()
     return render_template('admin/orders.html', orders=orders)
+
 
 @app.route('/rate/<int:pid>', methods=['POST'])
 def rate_product(pid):
