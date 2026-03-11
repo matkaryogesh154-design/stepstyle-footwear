@@ -1522,3 +1522,61 @@ footer {
     color: var(--gray);
     font-weight: 600;
 }
+
+/* ===== WISHLIST ===== */
+.btn-wishlist {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: white;
+    color: #e11d48;
+    border: 2px solid #e11d48;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 16px;
+    text-align: center;
+    text-decoration: none;
+    font-family: inherit;
+}
+.btn-wishlist:hover {
+    background: #e11d48;
+    color: white;
+    transform: translateY(-2px);
+}
+.btn-heart {
+    background: #fff0f3;
+    color: #e11d48;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+.btn-heart:hover {
+    background: #e11d48;
+    color: white;
+}
+.wishlist-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e11d48;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.wishlist-remove:hover { background: #9f1239; }

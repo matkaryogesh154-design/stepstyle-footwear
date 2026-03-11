@@ -75,6 +75,10 @@
             </form>
             {% endif %}
 
+            <a href="{{ url_for('add_wishlist', pid=product.id) }}" class="btn-wishlist">
+    ❤️ Add to Wishlist
+</a>
+
             <!-- RATE -->
             {% if session.user_id %}
             <div class="product-detail-rate">

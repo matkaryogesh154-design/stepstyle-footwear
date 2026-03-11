@@ -15,6 +15,7 @@
     </a>
     <div class="nav-right">
         {% if session.user_id %}
+            <a href="{{ url_for('wishlist') }}" class="nav-icon-btn">❤️</a>
             <a href="{{ url_for('cart') }}" class="cart-btn">
                 🛍️
                 {% if cart_count() > 0 %}

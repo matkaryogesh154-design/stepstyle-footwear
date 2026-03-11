@@ -41,7 +41,12 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     product_id = db.Column(db.Integer, nullable=False)
     stars = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)    
+    date = db.Column(db.DateTime, default=datetime.utcnow)   
+
+class Wishlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))     
 
 
 def get_cart():
@@ -121,6 +126,41 @@ def product_detail(pid):
                            avg_rating=avg_rating,
                            rating_count=len(ratings),
                            related=related)
+
+@app.route('/wishlist')
+def wishlist():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    items = Wishlist.query.filter_by(user_id=session['user_id']).all()
+    products = [Product.query.get(w.product_id) for w in items]
+    products = [p for p in products if p]
+    return render_template('wishlist.html', products=products)
+
+@app.route('/wishlist/add/<int:pid>')
+def add_wishlist(pid):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    exists = Wishlist.query.filter_by(user_id=session['user_id'], product_id=pid).first()
+    if not exists:
+        w = Wishlist(user_id=session['user_id'], product_id=pid)
+        db.session.add(w)
+        db.session.commit()
+        flash('Added to wishlist! ❤️', 'success')
+    else:
+        flash('Already in wishlist!', 'info')
+    return redirect(request.referrer or url_for('products'))
+
+@app.route('/wishlist/remove/<int:pid>')
+def remove_wishlist(pid):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    w = Wishlist.query.filter_by(user_id=session['user_id'], product_id=pid).first()
+    if w:
+        db.session.delete(w)
+        db.session.commit()
+        flash('Removed from wishlist!', 'info')
+    return redirect(request.referrer or url_for('wishlist'))
+
 @app.route('/search')
 def search():
     query = request.args.get('q')

@@ -1,39 +1,47 @@
-<div class="container mt-5">
+{% extends 'base.html' %}
+{% block content %}
 
-<div class="row">
-
-<div class="col-md-6">
-<img src="{{ product.image }}" class="img-fluid">
+<div class="orders-hero" style="background: linear-gradient(135deg, #4f0080 0%, #7c3aed 100%);">
+    <div class="orders-hero-content">
+        <h1>❤️ My Wishlist</h1>
+        <p>{{ products|length }} items saved</p>
+    </div>
 </div>
 
-<div class="col-md-6">
-
-<h2>{{ product.name }}</h2>
-<h2>Your Wishlist</h2>
-
-{% for p in products %}
-
-<div>
-<h3>{{ p.name }}</h3>
-<p>₹{{ p.price }}</p>
+<div class="section">
+    {% if products %}
+    <div class="grid">
+        {% for p in products %}
+        <div class="card">
+            <div class="card-img-wrap">
+                <a href="{{ url_for('product_detail', pid=p.id) }}">
+                    <img src="{{ p.image_url }}" alt="{{ p.name }}"
+                         onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                </a>
+                <span class="card-tag">{{ p.category }}</span>
+                <a href="{{ url_for('remove_wishlist', pid=p.id) }}" class="wishlist-remove">✕</a>
+            </div>
+            <div class="card-body">
+                <p class="brand">{{ p.brand }}</p>
+                <h3>{{ p.name }}</h3>
+                <div class="card-footer">
+                    <span class="price">₹{{ "{:,.0f}".format(p.price) }}</span>
+                    <form method="POST" action="{{ url_for('add_cart', pid=p.id) }}">
+                        <button type="submit" class="btn-add">+ Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-orders">
+        <div class="empty-icon">❤️</div>
+        <h3>Wishlist empty ahe!</h3>
+        <p>Aavdleli products wishlist madhe save kara.</p>
+        <a href="{{ url_for('products') }}" class="btn">Shop Now →</a>
+    </div>
+    {% endif %}
 </div>
 
-{% endfor %}
-
-<h3 class="text-success">₹{{ product.price }}</h3>
-
-<p>{{ product.description }}</p>
-
-<a href="/add_to_cart/{{ product.id }}" class="btn btn-warning">
-Add to Cart
-</a>
-
-<a href="/wishlist/add/{{ product.id }}" class="btn btn-outline-danger">
-❤️ Wishlist
-</a>
-
-</div>
-
-</div>
-
-</div>
+{% endblock %}

@@ -50,10 +50,10 @@
         {% for p in products %}
         <div class="card">
             <div class="card-img-wrap">
-    <a href="{{ url_for('product_detail', pid=p.id) }}">
-    <img src="{{ p.image_url }}" alt="{{ p.name }}"
-         onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-    </a>
+                <a href="{{ url_for('product_detail', pid=p.id) }}">
+                    <img src="{{ p.image_url }}" alt="{{ p.name }}"
+                         onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                </a>
                 <span class="card-tag">{{ p.category }}</span>
                 {% if p.stock == 0 %}
                 <span class="card-tag-red">Out of Stock</span>
@@ -87,13 +87,16 @@
 
                 <div class="card-footer">
                     <span class="price">₹{{ "{:,.0f}".format(p.price) }}</span>
-                    {% if p.stock > 0 %}
-                    <form method="POST" action="{{ url_for('add_cart', pid=p.id) }}">
-                        <button type="submit" class="btn-add">+ Cart</button>
-                    </form>
-                    {% else %}
-                    <span class="sold-out">Sold Out</span>
-                    {% endif %}
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        {% if p.stock > 0 %}
+                        <form method="POST" action="{{ url_for('add_cart', pid=p.id) }}">
+                            <button type="submit" class="btn-add">+ Cart</button>
+                        </form>
+                        {% else %}
+                        <span class="sold-out">Sold Out</span>
+                        {% endif %}
+                        <a href="{{ url_for('add_wishlist', pid=p.id) }}" class="btn-heart">❤️</a>
+                    </div>
                 </div>
             </div>
         </div>
