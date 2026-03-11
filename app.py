@@ -215,18 +215,24 @@ def my_orders():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     orders = Order.query.filter_by(user_id=session['user_id']).all()
-    # Convert items to dict format
-    import json as _json2
+    import json as _j
     for order in orders:
-        items = _json2.loads(order.items)
-        if isinstance(items, list):
-            # list to dict convert karo
-            items_dict = {}
-            for item in items:
-                items_dict[str(item.get('id', item['name']))] = item
-            order.items = _json2.dumps(items_dict)
-    return render_template('orders.html', orders=orders)
+        try:
+            items = _j.loads(order.items)
+            if isinstance(items, list):
+                items_dict = {}
+                for item in items:
+                    key = str(item.get('id', item['name']))
+                    items_dict[key] = item
+                order.items = _j.dumps(items_dict)
+        except:
+            pass
+    delivered = sum(1 for o in orders if o.status.lower() == 'delivered')
+    shipped = sum(1 for o in orders if o.status.lower() == 'shipped')
+    pending = sum(1 for o in orders if o.status.lower() == 'pending')
+    return render_template('orders.html', orders=orders, delivered=delivered, shipped=shipped, pending=pending)
 
+          
 @app.route('/order/<int:id>')
 def order_page(id):
     product = Product.query.get(id)

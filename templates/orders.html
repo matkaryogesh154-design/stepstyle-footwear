@@ -19,17 +19,17 @@
         </div>
         <div class="ostat">
             <span>✅</span>
-            <h4>{{ orders|selectattr('status','equalto','delivered')|list|length }}</h4>
+            <h4>{{ delivered }}</h4>
             <p>Delivered</p>
         </div>
         <div class="ostat">
             <span>🚚</span>
-            <h4>{{ orders|selectattr('status','equalto','shipped')|list|length }}</h4>
+            <h4>{{ shipped }}</h4>
             <p>Shipped</p>
         </div>
         <div class="ostat">
             <span>⏳</span>
-            <h4>{{ orders|selectattr('status','equalto','pending')|list|length }}</h4>
+            <h4>{{ pending }}</h4>
             <p>Pending</p>
         </div>
     </div>
@@ -45,10 +45,10 @@
                 </div>
             </div>
             <span class="status {{ order.status|lower }}">
-                {% if order.status == 'pending' %}⏳
-                {% elif order.status == 'processing' %}🔄
-                {% elif order.status == 'shipped' %}🚚
-                {% elif order.status == 'delivered' %}✅
+                {% if order.status|lower == 'pending' %}⏳
+                {% elif order.status|lower == 'processing' %}🔄
+                {% elif order.status|lower == 'shipped' %}🚚
+                {% elif order.status|lower == 'delivered' %}✅
                 {% endif %}
                 {{ order.status|capitalize }}
             </span>
@@ -60,18 +60,18 @@
                     <div class="pstep-dot">✓</div>
                     <span>Ordered</span>
                 </div>
-                <div class="pstep-line {% if order.status in ['processing','shipped','delivered'] %}done{% endif %}"></div>
-                <div class="pstep {% if order.status in ['processing','shipped','delivered'] %}done{% endif %}">
+                <div class="pstep-line {% if order.status|lower in ['processing','shipped','delivered'] %}done{% endif %}"></div>
+                <div class="pstep {% if order.status|lower in ['processing','shipped','delivered'] %}done{% endif %}">
                     <div class="pstep-dot">✓</div>
                     <span>Processing</span>
                 </div>
-                <div class="pstep-line {% if order.status in ['shipped','delivered'] %}done{% endif %}"></div>
-                <div class="pstep {% if order.status in ['shipped','delivered'] %}done{% endif %}">
+                <div class="pstep-line {% if order.status|lower in ['shipped','delivered'] %}done{% endif %}"></div>
+                <div class="pstep {% if order.status|lower in ['shipped','delivered'] %}done{% endif %}">
                     <div class="pstep-dot">✓</div>
                     <span>Shipped</span>
                 </div>
-                <div class="pstep-line {% if order.status == 'delivered' %}done{% endif %}"></div>
-                <div class="pstep {% if order.status == 'delivered' %}done{% endif %}">
+                <div class="pstep-line {% if order.status|lower == 'delivered' %}done{% endif %}"></div>
+                <div class="pstep {% if order.status|lower == 'delivered' %}done{% endif %}">
                     <div class="pstep-dot">✓</div>
                     <span>Delivered</span>
                 </div>
