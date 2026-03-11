@@ -1,48 +1,115 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="section">
-    <h2 class="section-title">📦 My Orders</h2>
-    <p class="section-sub">Track your purchases</p>
+<div class="orders-hero">
+    <div class="orders-hero-content">
+        <h1>📦 My Orders</h1>
+        <p>Track and manage all your orders</p>
+    </div>
+</div>
 
+<div class="section">
     {% if orders %}
-        {% for order in orders %}
-        <div class="order-card">
-            <div class="order-top">
+
+    <div class="order-stats">
+        <div class="ostat">
+            <span>🛍️</span>
+            <h4>{{ orders|length }}</h4>
+            <p>Total Orders</p>
+        </div>
+        <div class="ostat">
+            <span>✅</span>
+            <h4>{{ orders|selectattr('status','equalto','delivered')|list|length }}</h4>
+            <p>Delivered</p>
+        </div>
+        <div class="ostat">
+            <span>🚚</span>
+            <h4>{{ orders|selectattr('status','equalto','shipped')|list|length }}</h4>
+            <p>Shipped</p>
+        </div>
+        <div class="ostat">
+            <span>⏳</span>
+            <h4>{{ orders|selectattr('status','equalto','pending')|list|length }}</h4>
+            <p>Pending</p>
+        </div>
+    </div>
+
+    {% for order in orders|reverse %}
+    <div class="order-card-new">
+        <div class="order-card-header">
+            <div class="order-id-section">
+                <span class="order-badge">#{{ order.id }}</span>
                 <div>
                     <strong>Order #{{ order.id }}</strong>
-                    <span style="color:#888; font-size:0.85rem; margin-left:10px;">
-                        {{ order.date.strftime('%d %b %Y') }}
-                    </span>
+                    <p>{{ order.date.strftime('%d %B %Y, %I:%M %p') }}</p>
                 </div>
-                <span class="status {{ order.status|lower }}">{{ order.status }}</span>
             </div>
+            <span class="status {{ order.status|lower }}">
+                {% if order.status == 'pending' %}⏳
+                {% elif order.status == 'processing' %}🔄
+                {% elif order.status == 'shipped' %}🚚
+                {% elif order.status == 'delivered' %}✅
+                {% endif %}
+                {{ order.status|capitalize }}
+            </span>
+        </div>
 
-            <div class="order-items">
-                {% for item in order.items|from_json %}
-                <div class="order-item-row">
-                    <span>{{ item.name }} × {{ item.qty }}</span>
-                    <span>₹{{ "{:,.0f}".format(item.price * item.qty) }}</span>
+        <div class="order-progress">
+            <div class="progress-steps">
+                <div class="pstep done">
+                    <div class="pstep-dot">✓</div>
+                    <span>Ordered</span>
                 </div>
-                {% endfor %}
-            </div>
-
-            <div class="order-footer">
-                <span style="color:#888; font-size:0.85rem;">
-                    📍 {{ order.address[:50] }}...
-                </span>
-                <strong>Total: ₹{{ "{:,.0f}".format(order.total) }}</strong>
+                <div class="pstep-line {% if order.status in ['processing','shipped','delivered'] %}done{% endif %}"></div>
+                <div class="pstep {% if order.status in ['processing','shipped','delivered'] %}done{% endif %}">
+                    <div class="pstep-dot">✓</div>
+                    <span>Processing</span>
+                </div>
+                <div class="pstep-line {% if order.status in ['shipped','delivered'] %}done{% endif %}"></div>
+                <div class="pstep {% if order.status in ['shipped','delivered'] %}done{% endif %}">
+                    <div class="pstep-dot">✓</div>
+                    <span>Shipped</span>
+                </div>
+                <div class="pstep-line {% if order.status == 'delivered' %}done{% endif %}"></div>
+                <div class="pstep {% if order.status == 'delivered' %}done{% endif %}">
+                    <div class="pstep-dot">✓</div>
+                    <span>Delivered</span>
+                </div>
             </div>
         </div>
-        {% endfor %}
+
+        <div class="order-items-section">
+            {% set items = order.items|from_json %}
+            {% for key, item in items.items() %}
+            <div class="order-item-row-new">
+                <span class="item-emoji">👟</span>
+                <span class="item-name">{{ item.name }}</span>
+                <span class="item-qty">× {{ item.qty }}</span>
+                <span class="item-price">₹{{ "{:,.0f}".format(item.price * item.qty) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="order-card-footer">
+            <div class="order-address">
+                <span>📍</span>
+                <p>{{ order.address[:60] }}{% if order.address|length > 60 %}...{% endif %}</p>
+            </div>
+            <div class="order-total-section">
+                <span class="payment-method-badge">💵 COD</span>
+                <strong class="order-total">₹{{ "{:,.0f}".format(order.total) }}</strong>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 
     {% else %}
-        <div class="empty">
-            <p style="font-size:3rem;">📦</p>
-            <p style="font-size:1.1rem; font-weight:600; margin:10px 0;">No orders yet!</p>
-            <p style="color:#888; margin-bottom:20px;">Start shopping now</p>
-            <a href="{{ url_for('products') }}" class="btn">Shop Now</a>
-        </div>
+    <div class="empty-orders">
+        <div class="empty-icon">📦</div>
+        <h3>No orders yet!</h3>
+        <p>Looks like you haven't ordered anything yet.</p>
+        <a href="{{ url_for('products') }}" class="btn">Shop Now →</a>
+    </div>
     {% endif %}
 </div>
 

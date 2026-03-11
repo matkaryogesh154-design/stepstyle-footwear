@@ -1,53 +1,23 @@
-{% extends 'base.html' %}
-{% block content %}
-
-<div class="section">
-    <h2 class="section-title">📦 My Orders</h2>
-    <p class="section-sub">Track your purchases</p>
-
-    {% if orders %}
-        {% for order in orders %}
-        <div class="order-card">
-            <div class="order-top">
-                <div>
-                    <strong>#{{ order.id }}</strong>
-                    <span style="color:#888; font-size:0.85rem; margin-left:10px;">
-                        {{ order.date.strftime('%d %b %Y') }}
-                    </span>
-                </div>
-                <span class="status {{ order.status|lower }}">{{ order.status }}</span>
-            </div>
-
-            <!-- ITEMS -->
-            <div class="order-items">
-                {% set items = order.items | tojson | safe %}
-                {% for item in order.items | from_json %}
-                <div class="order-item-row">
-                    <span>{{ item.name }} × {{ item.qty }}</span>
-                    <span>₹{{ "{:,.0f}".format(item.price * item.qty) }}</span>
-                </div>
-                {% endfor %}
-            </div>
-
-            <div class="order-footer">
-                <span style="color:#888; font-size:0.85rem;">
-                    📍 {{ order.address[:50] }}...
-                </span>
-                <strong style="color:#1a1a1a;">
-                    Total: ₹{{ "{:,.0f}".format(order.total) }}
-                </strong>
-            </div>
+<!-- ORDER ITEMS -->
+<div class="order-items-section">
+    {% set items = order.items|from_json %}
+    {% if items is mapping %}
+        {% for name, item in items.items() %}
+        <div class="order-item-row-new">
+            <span class="item-emoji">👟</span>
+            <span class="item-name">{{ item.name }}</span>
+            <span class="item-qty">× {{ item.qty }}</span>
+            <span class="item-price">₹{{ "{:,.0f}".format(item.price * item.qty) }}</span>
         </div>
         {% endfor %}
-
     {% else %}
-        <div class="empty">
-            <p style="font-size:3rem;">📦</p>
-            <p style="font-size:1.1rem; font-weight:600; margin:10px 0;">No orders yet!</p>
-            <p style="color:#888; margin-bottom:20px;">Start shopping now</p>
-            <a href="{{ url_for('products') }}" class="btn">Shop Now</a>
+        {% for item in items %}
+        <div class="order-item-row-new">
+            <span class="item-emoji">👟</span>
+            <span class="item-name">{{ item.name }}</span>
+            <span class="item-qty">× {{ item.qty }}</span>
+            <span class="item-price">₹{{ "{:,.0f}".format(item.price * item.qty) }}</span>
         </div>
+        {% endfor %}
     {% endif %}
 </div>
-
-{% endblock %}

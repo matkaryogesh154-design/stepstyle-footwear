@@ -1061,3 +1061,200 @@ footer {
     font-size: 0.8rem;
     color: #aaa;
 }
+
+/* ===== ORDERS HERO ===== */
+.orders-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    padding: 40px 32px;
+    color: white;
+}
+.orders-hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.orders-hero h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+.orders-hero p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.95rem;
+}
+
+/* ===== ORDER STATS ===== */
+.order-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.ostat {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+}
+.ostat:hover { transform: translateY(-3px); }
+.ostat span { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+.ostat h4 { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 4px; }
+.ostat p { color: var(--gray); font-size: 0.82rem; font-weight: 600; }
+
+/* ===== ORDER CARD NEW ===== */
+.order-card-new {
+    background: white;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+.order-card-new:hover { border-color: var(--accent); transform: translateY(-2px); }
+.order-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+}
+.order-id-section {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.order-badge {
+    background: var(--primary);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+.order-id-section strong { font-size: 1rem; font-weight: 800; display: block; margin-bottom: 2px; }
+.order-id-section p { color: var(--gray); font-size: 0.82rem; margin: 0; }
+
+/* ===== PROGRESS BAR ===== */
+.order-progress {
+    padding: 20px 24px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border);
+}
+.progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.pstep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+.pstep-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    transition: all 0.3s;
+}
+.pstep.done .pstep-dot {
+    background: #10b981;
+    color: white;
+}
+.pstep span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--gray);
+}
+.pstep.done span { color: #10b981; }
+.pstep-line {
+    flex: 1;
+    height: 3px;
+    background: #e2e8f0;
+    margin: 0 8px;
+    margin-bottom: 20px;
+    border-radius: 2px;
+    transition: background 0.3s;
+}
+.pstep-line.done { background: #10b981; }
+
+/* ===== ORDER ITEMS ===== */
+.order-items-section {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+}
+.order-item-row-new {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 0.9rem;
+}
+.item-emoji { font-size: 1.2rem; }
+.item-name { flex: 1; font-weight: 600; }
+.item-qty { color: var(--gray); font-size: 0.85rem; }
+.item-price { font-weight: 800; color: var(--primary); }
+
+/* ===== ORDER FOOTER ===== */
+.order-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.order-address {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray);
+    font-size: 0.85rem;
+    flex: 1;
+}
+.order-total-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.payment-method-badge {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+.order-total {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--primary);
+}
+
+/* ===== EMPTY ORDERS ===== */
+.empty-orders {
+    text-align: center;
+    padding: 80px 20px;
+}
+.empty-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+}
+.empty-orders h3 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+.empty-orders p {
+    color: var(--gray);
+    margin-bottom: 24px;
+}

@@ -170,6 +170,16 @@ def my_orders():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     orders = Order.query.filter_by(user_id=session['user_id']).all()
+    # Convert items to dict format
+    import json as _json2
+    for order in orders:
+        items = _json2.loads(order.items)
+        if isinstance(items, list):
+            # list to dict convert karo
+            items_dict = {}
+            for item in items:
+                items_dict[str(item.get('id', item['name']))] = item
+            order.items = _json2.dumps(items_dict)
     return render_template('orders.html', orders=orders)
 
 @app.route('/order/<int:id>')
