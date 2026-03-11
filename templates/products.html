@@ -1,35 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="section">
-    <h2 class="section-title">Shop Footwear</h2>
-    <p class="section-sub">{{ products|length }} products found</p>
-
-    <!-- SEARCH BAR -->
-    <form method="GET" action="{{ url_for('products') }}" class="search-bar">
-        <input type="text" name="search" value="{{ search }}"
-               placeholder="Search shoes, brands...">
-        {% if selected %}
-        <input type="hidden" name="category" value="{{ selected }}">
-        {% endif %}
-        <button type="submit">🔍</button>
-    </form>
-
-    <!-- FILTERS -->
-    <div class="filters">
-        <a href="{{ url_for('products') }}"
-           class="btn-sm {% if not selected %}active{% endif %}">All</a>
-        {% for cat in ['Sneakers','Formal','Sandals','Sports'] %}
-        <a href="{{ url_for('products') }}?category={{ cat }}"
-           class="btn-sm {% if selected == cat %}active{% endif %}">
-            {% if cat == 'Sneakers' %}👟
-            {% elif cat == 'Formal' %}👞
-            {% elif cat == 'Sandals' %}👡
-            {% else %}⚽{% endif %}
-            {{ cat }}
-        </a>
-        {% endfor %}
+<!-- PRODUCTS HERO -->
+<div class="products-hero">
+    <div class="products-hero-content">
+        <h1>👟 Shop Footwear</h1>
+        <p>{{ products|length }} products found</p>
     </div>
+</div>
+
+<div class="section">
+
+    <!-- SEARCH + FILTER ROW -->
+    <div class="shop-controls">
+        <form method="GET" action="{{ url_for('products') }}" class="search-bar">
+            <input type="text" name="search" value="{{ search }}"
+                   placeholder="🔍 Search shoes, brands...">
+            {% if selected %}
+            <input type="hidden" name="category" value="{{ selected }}">
+            {% endif %}
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="filters">
+            <a href="{{ url_for('products') }}"
+               class="btn-sm {% if not selected %}active{% endif %}">All</a>
+            {% for cat in ['Sneakers','Formal','Sandals','Sports'] %}
+            <a href="{{ url_for('products') }}?category={{ cat }}"
+               class="btn-sm {% if selected == cat %}active{% endif %}">
+                {% if cat == 'Sneakers' %}👟
+                {% elif cat == 'Formal' %}👞
+                {% elif cat == 'Sandals' %}👡
+                {% else %}⚽{% endif %}
+                {{ cat }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if search %}
+    <div class="search-result-tag">
+        🔍 Results for "<strong>{{ search }}</strong>"
+        <a href="{{ url_for('products') }}">✕ Clear</a>
+    </div>
+    {% endif %}
 
     {% if products %}
     <div class="grid">
@@ -49,22 +63,17 @@
                 <p class="brand">{{ p.brand }}</p>
                 <h3>{{ p.name }}</h3>
 
-                <!-- RATING DISPLAY -->
                 <div class="stars-display">
                     {% set avg = ratings.get(p.id, 0) %}
                     {% for i in range(1, 6) %}
-                        {% if i <= avg %}
-                            <span class="star filled">★</span>
-                        {% else %}
-                            <span class="star">★</span>
-                        {% endif %}
+                        {% if i <= avg %}<span class="star filled">★</span>
+                        {% else %}<span class="star">★</span>{% endif %}
                     {% endfor %}
                     <span class="rating-num">
                         {% if avg > 0 %}{{ avg }}{% else %}No ratings{% endif %}
                     </span>
                 </div>
 
-                <!-- RATING FORM -->
                 {% if session.user_id %}
                 <form method="POST" action="{{ url_for('rate_product', pid=p.id) }}" class="rate-form">
                     <span class="rate-label">Rate:</span>
