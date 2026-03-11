@@ -1,68 +1,95 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="section">
-    <h2 class="section-title">🛍️ My Cart</h2>
+<div class="orders-hero" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);">
+    <div class="orders-hero-content">
+        <h1>🛒 My Cart</h1>
+        <p>{{ cart|length }} items in your cart</p>
+    </div>
+</div>
 
-    {% if cart %}
+<div class="section">
+{% if cart %}
+<div class="cart-layout">
+
+    <!-- LEFT - CART ITEMS -->
+    <div class="cart-items">
+        {% for pid, item in cart.items() %}
+        <div class="cart-item-card">
+            <img src="{{ item.image }}" alt="{{ item.name }}"
+                 onerror="this.src='https://via.placeholder.com/100x100?text=No+Image'">
+            <div class="cart-item-info">
+                <h3>{{ item.name }}</h3>
+                <p class="cart-item-price">₹{{ "{:,.0f}".format(item.price) }}</p>
+                <div class="cart-qty-row">
+                    <a href="{{ url_for('remove_cart', pid=pid) }}" class="qty-btn">−</a>
+                    <span class="qty-num">{{ item.qty }}</span>
+                    <a href="{{ url_for('add_cart', pid=pid) }}" class="qty-btn">+</a>
+                </div>
+            </div>
+            <div class="cart-item-right">
+                <span class="cart-item-total">₹{{ "{:,.0f}".format(item.price * item.qty) }}</span>
+                <a href="{{ url_for('remove_cart', pid=pid) }}" class="cart-remove">🗑️</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- RIGHT - ORDER SUMMARY -->
+    <div class="cart-summary">
+        <h3>Order Summary</h3>
         {% set total = namespace(val=0) %}
-        {% for item in cart.values() %}
+        {% for pid, item in cart.items() %}
             {% set total.val = total.val + item.price * item.qty %}
         {% endfor %}
 
-        <div class="cart-layout">
-            <!-- CART ITEMS -->
-            <div class="cart-items">
-                {% for item in cart.values() %}
-                <div class="cart-item">
-                    <img src="{{ item.img }}" alt="{{ item.name }}"
-                         onerror="this.src='https://via.placeholder.com/100x80?text=Shoe'">
-                    <div class="cart-item-info">
-                        <h3>{{ item.name }}</h3>
-                        <p>₹{{ "{:,.0f}".format(item.price) }} each</p>
-                    </div>
-                    <div class="cart-item-right">
-                        <p class="cart-subtotal">₹{{ "{:,.0f}".format(item.price * item.qty) }}</p>
-                        <span class="cart-qty">Qty: {{ item.qty }}</span>
-                        <a href="{{ url_for('remove_cart', pid=item.id) }}" class="remove-btn">🗑️</a>
-                    </div>
-                </div>
-                {% endfor %}
+        <div class="summary-rows">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>₹{{ "{:,.0f}".format(total.val) }}</span>
             </div>
-
-            <!-- SUMMARY -->
-            <div class="cart-summary">
-                <h3>Order Summary</h3>
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span>₹{{ "{:,.0f}".format(total.val) }}</span>
-                </div>
-                <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>{% if total.val >= 2000 %}FREE{% else %}₹99{% endif %}</span>
-                </div>
-                <div class="summary-row total-row">
-                    <span>Total</span>
-                    <span>₹{{ "{:,.0f}".format(total.val + (0 if total.val >= 2000 else 99)) }}</span>
-                </div>
-                <a href="{{ url_for('checkout') }}" class="btn" style="width:100%;text-align:center;margin-top:16px;border-radius:12px;padding:14px;">
-                    Checkout →
-                </a>
-                <a href="{{ url_for('products') }}" 
-                   style="display:block;text-align:center;margin-top:12px;color:#888;font-size:0.9rem;">
-                    ← Continue Shopping
-                </a>
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span class="free-ship">
+                    {% if total.val >= 2000 %}FREE 🎉{% else %}₹99{% endif %}
+                </span>
+            </div>
+            {% if total.val < 2000 %}
+            <div class="shipping-note">
+                Add ₹{{ "{:,.0f}".format(2000 - total.val) }} more for FREE shipping!
+            </div>
+            {% endif %}
+            <div class="summary-divider"></div>
+            <div class="summary-row total-row">
+                <span>Total</span>
+                <span>₹{{ "{:,.0f}".format(total.val + (0 if total.val >= 2000 else 99)) }}</span>
             </div>
         </div>
 
-    {% else %}
-        <div class="empty">
-            <p style="font-size:3rem;">🛒</p>
-            <p style="font-size:1.1rem;font-weight:600;margin:10px 0;">Cart is empty!</p>
-            <p style="color:#888;margin-bottom:20px;">Add some awesome footwear!</p>
-            <a href="{{ url_for('products') }}" class="btn">Shop Now</a>
+        <a href="{{ url_for('checkout') }}" class="btn-checkout">
+            Proceed to Checkout →
+        </a>
+        <a href="{{ url_for('products') }}" class="btn-continue">
+            ← Continue Shopping
+        </a>
+
+        <!-- TRUST -->
+        <div class="cart-trust">
+            <div class="cart-trust-item">🔒 Secure Checkout</div>
+            <div class="cart-trust-item">🚚 Free shipping ₹2000+</div>
+            <div class="cart-trust-item">🔄 Easy returns</div>
         </div>
-    {% endif %}
+    </div>
+</div>
+
+{% else %}
+<div class="empty-orders">
+    <div class="empty-icon">🛒</div>
+    <h3>Cart empty ahe!</h3>
+    <p>Kahi products add kara cart madhe.</p>
+    <a href="{{ url_for('products') }}" class="btn">Shop Now →</a>
+</div>
+{% endif %}
 </div>
 
 {% endblock %}
