@@ -7,8 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<nav class="navbar">
+    <nav class="navbar">
     <a href="{{ url_for('index') }}" class="logo">
         <span class="logo-icon">👟</span>
         <span class="logo-text">StepStyle</span>
@@ -28,7 +27,7 @@
             {% endif %}
             <a href="{{ url_for('logout') }}" class="nav-icon-btn">🚪</a>
         {% else %}
-            <a href="{{ url_for('login') }}" class="nav-btn-outline">Login</a>
+        <a href="{{ url_for('login') }}" class="nav-btn-outline">Login</a>
             <a href="{{ url_for('register') }}" class="nav-btn-fill">Register</a>
         {% endif %}
     </div>
@@ -39,7 +38,6 @@
     <div class="flash {{ cat }}">{{ msg }} <span onclick="this.parentElement.remove()">×</span></div>
     {% endfor %}
 {% endwith %}
-
 <div class="main">{% block content %}{% endblock %}</div>
 
 <footer>
