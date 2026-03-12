@@ -1,42 +1,181 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="form-box">
-    <h2>{% if product %}Edit Product{% else %}Add Product{% endif %}</h2>
-    <form method="POST">
-        <input type="text" name="name" placeholder="Product Name"
-               value="{{ product.name if product else '' }}" required>
-
-        <input type="number" name="price" placeholder="Price"
-               value="{{ product.price if product else '' }}" required>
-
-        <select name="category" required>
-            {% for cat in ['Sneakers','Formal','Sandals','Sports'] %}
-            <option value="{{ cat }}"
-                {% if product and product.category == cat %}selected{% endif %}>
-                {{ cat }}
-            </option>
-            {% endfor %}
-        </select>
-
-        <input type="text" name="brand" placeholder="Brand"
-               value="{{ product.brand if product else '' }}" required>
-
-        <input type="number" name="stock" placeholder="Stock"
-               value="{{ product.stock if product else '' }}" required>
-
-        <input type="text" name="image_url" placeholder="Image URL"
-               value="{{ product.image_url if product else '' }}">
-
-        <textarea name="description" placeholder="Description" rows="3">
-            {{ product.description if product else '' }}
-        </textarea>
-
-        <button type="submit" class="btn">
-            {% if product %}Update Product{% else %}Add Product{% endif %}
-        </button>
-        <a href="{{ url_for('admin_products') }}" class="btn-sm">Cancel</a>
-    </form>
+<div class="orders-hero" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);">
+    <div class="orders-hero-content">
+        <h1>{% if product %}✏️ Edit Product{% else %}➕ Add New Product{% endif %}</h1>
+        <p>{% if product %}Product details update {% else %}New product add in store{% endif %}</p>
+    </div>
 </div>
+
+<div class="section">
+<div class="product-form-layout">
+
+    <!-- LEFT - FORM -->
+    <div class="product-form-main">
+        <div class="checkout-block">
+            <h3>📦 Product Details</h3>
+            <form method="POST">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" name="name" placeholder="e.g. Nike Air Max"
+                            value="{{ product.name if product else '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select name="category" required>
+                            <option value="">-- Select Category --</option>
+                            {% for cat in ['Sports', 'Formal', 'Casual', 'Sandals'] %}
+                            <option value="{{ cat }}"
+                                {% if product and product.category == cat %}selected{% endif %}>
+                                {{ cat }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (₹) *</label>
+                        <input type="number" name="price" placeholder="e.g. 2999"
+                            value="{{ product.price if product else '' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Quantity *</label>
+                        <input type="number" name="stock" placeholder="e.g. 50"
+                            value="{{ product.stock if product else '' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3"
+                        placeholder="Product chi thodi mahiti lihа...">{{ product.description if product else '' }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="text" name="image" id="imageUrl"
+                        placeholder="https://images.unsplash.com/..."
+                        value="{{ product.image if product else '' }}"
+                        oninput="previewImage(this.value)">
+                </div>
+
+                <!-- IMAGE PREVIEW -->
+                <div class="image-preview-box" id="previewBox">
+                    {% if product and product.image %}
+                    <img src="{{ product.image }}" id="previewImg" alt="Preview">
+                    {% else %}
+                    <div class="preview-placeholder" id="previewPlaceholder">
+                        <span>🖼️</span>
+                        <p>See Image preview here </p>
+                    </div>
+                    <img src="" id="previewImg" alt="Preview" style="display:none;">
+                    {% endif %}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-checkout" style="border:none; cursor:pointer; font-family:inherit; width:auto; padding: 14px 32px;">
+                        {% if product %}✏️ Update Product{% else %}➕ Add Product{% endif %}
+                    </button>
+                    <a href="{{ url_for('admin_products') }}" class="btn-continue" style="width:auto; padding: 12px 24px; display:inline-block;">
+                        ← Cancel
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- RIGHT - TIPS -->
+    <div class="product-form-side">
+        <div class="checkout-block">
+            <h3>💡 Tips</h3>
+            <div class="tip-list">
+                <div class="tip-row">
+                    <span>📝</span>
+                    <p>The product name should be clear and short.</p>
+                </div>
+                <div class="tip-row">
+                    <span>💰</span>
+                    <p>Write Price numbers into (e.g. 2999)</p>
+                </div>
+                <div class="tip-row">
+                    <span>🖼️</span>
+                    <p>Free high quality images are available on unplash.com.</p>
+                </div>
+                <div class="tip-row">
+                    <span>📦</span>
+                    <p>If the stock is 0, the product will appear as sold out.</p>
+                </div>
+                <div class="tip-row">
+                    <span>🏷️</span>
+                    <p>Search by category for filters.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-block">
+            <h3>📊 Categories</h3>
+            <div class="cat-stats">
+                <div class="cat-stat-item cat-blue">
+                    <span>🏃</span>
+                    <div>
+                        <strong>Sports</strong>
+                        <p>Running, Football, Gym</p>
+                    </div>
+                </div>
+                <div class="cat-stat-item cat-yellow">
+                    <span>👔</span>
+                    <div>
+                        <strong>Formal</strong>
+                        <p>Oxford, Derby, Loafers</p>
+                    </div>
+                </div>
+                <div class="cat-stat-item cat-green">
+                    <span>😎</span>
+                    <div>
+                        <strong>Casual</strong>
+                        <p>Sneakers, Boots, Canvas</p>
+                    </div>
+                </div>
+                <div class="cat-stat-item cat-pink">
+                    <span>🩴</span>
+                    <div>
+                        <strong>Sandals</strong>
+                        <p>Slippers, Flip Flops, Heels</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script>
+function previewImage(url) {
+    const img = document.getElementById('previewImg');
+    const placeholder = document.getElementById('previewPlaceholder');
+    if (url) {
+        img.src = url;
+        img.style.display = 'block';
+        img.onerror = function() {
+            img.style.display = 'none';
+            if(placeholder) placeholder.style.display = 'flex';
+        };
+        img.onload = function() {
+            img.style.display = 'block';
+            if(placeholder) placeholder.style.display = 'none';
+        };
+    } else {
+        img.style.display = 'none';
+        if(placeholder) placeholder.style.display = 'flex';
+    }
+}
+</script>
 
 {% endblock %}
