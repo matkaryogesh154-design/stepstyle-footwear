@@ -685,3 +685,4 @@ footer { background: var(--primary); color: rgba(255,255,255,0.4); text-align: c
     .order-stats { grid-template-columns: repeat(2, 1fr); }
     .admin-stats-grid { grid-template-columns: 1fr 1fr; }
 }
+
