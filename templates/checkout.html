@@ -1,93 +1,148 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="orders-hero" style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);">
+    <div class="orders-hero-content">
+        <h1>💳 Checkout</h1>
+        <p>Complete your order securely</p>
+    </div>
+</div>
+
 <div class="section">
-    <h2 class="section-title">Checkout</h2>
-    <p class="section-sub">Almost done! Enter delivery details.</p>
+<div class="checkout-layout">
 
-    <div class="checkout-layout">
-        <!-- ADDRESS FORM -->
-        <div class="checkout-form">
+    <!-- LEFT - FORM -->
+    <div class="checkout-form-section">
+
+        <!-- DELIVERY ADDRESS -->
+        <div class="checkout-block">
             <h3>📍 Delivery Address</h3>
-            <form method="POST">
-                <textarea name="address" rows="4"
-                    placeholder="House no, Street, City, State, PIN code..."
-                    required></textarea>
-
-                <!-- PAYMENT METHOD -->
-                <h3 style="margin-bottom:16px;">💳 Payment Method</h3>
-                <div class="payment-options">
-                    <label class="payment-card active" id="cod-label">
-                        <input type="radio" name="payment" value="Cash on Delivery"
-                               checked onchange="selectPayment(this)">
-                        <span class="payment-icon">💵</span>
-                        <div>
-                            <strong>Cash on Delivery</strong>
-                            <p>Pay when you receive</p>
-                        </div>
-                        <span class="payment-check">✓</span>
-                    </label>
-
-                    <label class="payment-card" id="upi-label">
-                        <input type="radio" name="payment" value="UPI"
-                               onchange="selectPayment(this)">
-                        <span class="payment-icon">📱</span>
-                        <div>
-                            <strong>UPI Payment</strong>
-                            <p>GPay, PhonePe, Paytm</p>
-                        </div>
-                        <span class="payment-check">✓</span>
-                    </label>
-
-                    <label class="payment-card" id="card-label">
-                        <input type="radio" name="payment" value="Card"
-                               onchange="selectPayment(this)">
-                        <span class="payment-icon">💳</span>
-                        <div>
-                            <strong>Credit / Debit Card</strong>
-                            <p>Visa, Mastercard, Rupay</p>
-                        </div>
-                        <span class="payment-check">✓</span>
-                    </label>
+            <form method="POST" action="{{ url_for('checkout') }}" id="checkout-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" placeholder="10 digit number" required>
+                    </div>
                 </div>
-
-                <button type="submit" class="btn"
-                    style="width:100%;padding:15px;border-radius:12px;font-size:1rem;margin-top:20px;">
-                    ✅ Place Order
-                </button>
-            </form>
+                <div class="form-group">
+                    <label>Full Address</label>
+                    <textarea name="address" placeholder="Home number, Society, Street..." rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City</label>
+                        <input type="text" name="city" placeholder="City" required>
+                    </div>
+                    <div class="form-group">
+                        <label>PIN Code</label>
+                        <input type="text" name="pincode" placeholder="6 digit PIN" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>State</label>
+                    <input type="text" name="state" placeholder="State" required>
+                </div>
         </div>
 
-        <!-- ORDER SUMMARY -->
-        <div class="cart-summary">
-            <h3>🛍️ Order Items</h3>
-            {% set total = namespace(val=0) %}
-            {% for item in cart.values() %}
+        <!-- PAYMENT METHOD -->
+        <div class="checkout-block">
+            <h3>💰 Payment Method</h3>
+            <div class="payment-options">
+                <label class="payment-option selected" id="cod-label">
+                    <input type="radio" name="payment_method" value="COD" checked onchange="selectPayment(this)">
+                    <div class="payment-icon">💵</div>
+                    <div>
+                        <strong>Cash on Delivery</strong>
+                        <p>Pay when you receive</p>
+                    </div>
+                    <span class="payment-check">✓</span>
+                </label>
+                <label class="payment-option" id="upi-label">
+                    <input type="radio" name="payment_method" value="UPI" onchange="selectPayment(this)">
+                    <div class="payment-icon">📱</div>
+                    <div>
+                        <strong>UPI Payment</strong>
+                        <p>GPay, PhonePe, Paytm</p>
+                    </div>
+                    <span class="payment-check">✓</span>
+                </label>
+                <label class="payment-option" id="card-label">
+                    <input type="radio" name="payment_method" value="Card" onchange="selectPayment(this)">
+                    <div class="payment-icon">💳</div>
+                    <div>
+                        <strong>Credit/Debit Card</strong>
+                        <p>Visa, Mastercard, RuPay</p>
+                    </div>
+                    <span class="payment-check">✓</span>
+                </label>
+            </div>
+        </div>
+
+        </form>
+    </div>
+
+    <!-- RIGHT - ORDER SUMMARY -->
+    <div class="cart-summary">
+        <h3>🧾 Order Summary</h3>
+        {% set total = namespace(val=0) %}
+        {% for pid, item in cart.items() %}
             {% set total.val = total.val + item.price * item.qty %}
-            <div class="summary-row">
-                <span>{{ item.name }} × {{ item.qty }}</span>
-                <span>₹{{ "{:,.0f}".format(item.price * item.qty) }}</span>
+        {% endfor %}
+
+        <div class="checkout-items">
+            {% for pid, item in cart.items() %}
+            <div class="checkout-item">
+                <img src="{{ item.image }}" alt="{{ item.name }}"
+                     onerror="this.src='https://via.placeholder.com/50x50?text=No'">
+                <div class="checkout-item-info">
+                    <p>{{ item.name }}</p>
+                    <span>× {{ item.qty }}</span>
+                </div>
+                <strong>₹{{ "{:,.0f}".format(item.price * item.qty) }}</strong>
             </div>
             {% endfor %}
+        </div>
+
+        <div class="summary-rows">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>₹{{ "{:,.0f}".format(total.val) }}</span>
+            </div>
             <div class="summary-row">
                 <span>Shipping</span>
-                <span>{% if total.val >= 2000 %}FREE{% else %}₹99{% endif %}</span>
+                <span class="free-ship">
+                    {% if total.val >= 2000 %}FREE 🎉{% else %}₹99{% endif %}
+                </span>
             </div>
+            <div class="summary-divider"></div>
             <div class="summary-row total-row">
                 <span>Total</span>
                 <span>₹{{ "{:,.0f}".format(total.val + (0 if total.val >= 2000 else 99)) }}</span>
             </div>
-            <div class="cod-note">
-                💵 Cash on Delivery available!
-            </div>
+        </div>
+
+        <button type="submit" form="checkout-form" class="btn-checkout">
+            🎉 Place Order
+        </button>
+
+        <div class="cart-trust" style="margin-top:16px;">
+            <div class="cart-trust-item">🔒 100% Secure Payment</div>
+            <div class="cart-trust-item">🚚 Fast Delivery</div>
+            <div class="cart-trust-item">🔄 Easy Returns</div>
         </div>
     </div>
+
+</div>
 </div>
 
 <script>
-function selectPayment(el) {
-    document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('active'));
-    el.closest('.payment-card').classList.add('active');
+function selectPayment(radio) {
+    document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+    radio.closest('.payment-option').classList.add('selected');
 }
 </script>
 
